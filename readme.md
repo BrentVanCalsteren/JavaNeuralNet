@@ -1,9 +1,10 @@
 #  Renewing RNN from Scratch in Java project -> goal is implementing other architecture's as well
 ## Focus right now
 
-- RNN IS MOSTLY DONE
+- RNN IS MOSTLY DONE ☕
 - CNN next?
 - LSTM-GRU (gru replacing lstm?)
+- transformer 🧢
 
 ## why not just updating old code
 looking back at the code, it's messy, 
