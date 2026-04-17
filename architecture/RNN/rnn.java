@@ -1,6 +1,7 @@
 package architecture.RNN;
 import architecture.activation_fun;
 import architecture.blocks.*;
+import architecture.gradiant_loss;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,9 +10,10 @@ public class rnn {
     private List<flat_layer> layers;
     private int inputSize;
     private int outputSize;
+    private gradiant_loss grad_and_loss;
     public double learning_rate = 0.01;
 
-    public rnn(int[] sizes) {
+    public rnn(int[] sizes, gradiant_loss grad_and_loss) {
         this.inputSize = sizes[0];
         this.outputSize = sizes[sizes.length - 1];
         this.generate_layers(sizes);
@@ -27,7 +29,7 @@ public class rnn {
 
     public void learn_from_input(double[] input,double[] target){
         double[] output = get_output(input);
-        double[] dOutput = computeLossGradient(output, target); //todo: gradiant function calc
+        double[] dOutput = grad_and_loss.gradient(output, target);
         for(int i = layers.size()-1; i>=0;i--) {
             dOutput = layers.get(i).backward(dOutput);
         }
