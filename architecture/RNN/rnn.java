@@ -16,18 +16,19 @@ public class rnn {
     public rnn(int[] sizes, gradiant_loss grad_and_loss) {
         this.inputSize = sizes[0];
         this.outputSize = sizes[sizes.length - 1];
+        this.grad_and_loss = grad_and_loss;
         this.generate_layers(sizes);
     }
 
     private void generate_layers(int[] sizes) {
         layers = new ArrayList<>();
         for (int i = 1; i<sizes.length-1;i++) {
-            layers.add(new flat_layer(sizes[i-1],sizes[i],activation_fun.TANH));
+            layers.add(new flat_layer(sizes[i-1],sizes[i],activation_fun.RELU));
         }
         layers.add(new flat_layer(sizes[sizes.length-2],sizes[sizes.length-1],activation_fun.LINEAR));
     }
 
-    public void learn_from_input(double[] input,double[] target){
+    public double learn_from_input(double[] input,double[] target){
         double[] output = get_output(input);
         double[] dOutput = grad_and_loss.gradient(output, target);
         for(int i = layers.size()-1; i>=0;i--) {
@@ -37,6 +38,7 @@ public class rnn {
         for(int i = layers.size()-1; i>=0;i--) {
             layers.get(i).updateParameters(learning_rate);
         }
+        return grad_and_loss.loss(output,target);
     }
 
     public double[] get_output(double[] input){
@@ -46,8 +48,5 @@ public class rnn {
         }
         return layers.getLast().forward(temp);
     }
-
-
-
 
 }
