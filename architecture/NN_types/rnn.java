@@ -1,31 +1,29 @@
-package architecture.RNN;
-import architecture.activation_fun;
+package architecture.NN_types;
+import architecture.Activation_fun;
 import architecture.blocks.*;
-import architecture.gradiant_loss;
+import architecture.Gradiant_loss;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class rnn {
-    private List<flat_layer> layers;
-    private int inputSize;
-    private int outputSize;
-    private gradiant_loss grad_and_loss;
+    private List<Flat_layer> layers = new ArrayList<>();
+    private Gradiant_loss grad_and_loss;
     public double learning_rate = 0.01;
 
-    public rnn(int[] sizes, gradiant_loss grad_and_loss) {
-        this.inputSize = sizes[0];
-        this.outputSize = sizes[sizes.length - 1];
+    public rnn(Layer_data[] data, Gradiant_loss grad_and_loss, double learning_rate) {
         this.grad_and_loss = grad_and_loss;
-        this.generate_layers(sizes);
+        this.learning_rate = learning_rate;
+        this.generate_layers(data);
     }
 
-    private void generate_layers(int[] sizes) {
-        layers = new ArrayList<>();
-        for (int i = 1; i<sizes.length-1;i++) {
-            layers.add(new flat_layer(sizes[i-1],sizes[i],activation_fun.RELU));
+    private void generate_layers(Layer_data[] data) {
+        for(Layer_data d : data) {
+            if(d.layer_type != Layer_type.FLAT) return;
+            Flat_layer l = new Flat_layer(d.input_dim,d.output_dim,d.activation_function);
+            layers.add(l);
         }
-        layers.add(new flat_layer(sizes[sizes.length-2],sizes[sizes.length-1],activation_fun.LINEAR));
+
     }
 
     public double learn_from_input(double[] input,double[] target){

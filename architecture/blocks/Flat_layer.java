@@ -1,15 +1,15 @@
 package architecture.blocks;
 
-import architecture.activation_fun;
+import architecture.Activation_fun;
 
 import java.util.Random;
 
-public class flat_layer {
+public class Flat_layer extends Layer {
     private double[][] weights;  // [outputSize][inputSize]
     private double[] biases;     // [outputSize]
     private int inputSize;
     private int outputSize;
-    private activation_fun act_fun;
+    private Activation_fun act_fun;
 
     //Cache
     private double[] cache_lastInput;
@@ -20,7 +20,7 @@ public class flat_layer {
 
     private static final Random rand = new Random();
 
-    public flat_layer(int inputSize, int outputSize, activation_fun fun) {
+    public Flat_layer(int inputSize, int outputSize, Activation_fun fun) {
         this.inputSize = inputSize;
         this.outputSize = outputSize;
         this.act_fun = fun;
@@ -33,7 +33,7 @@ public class flat_layer {
 
     private void initWeights() {
         //spread out 10 over all the weights Xavier method for tahn/sigmoid
-        if (act_fun == activation_fun.SIGMOID | act_fun == activation_fun.TANH) {
+        if (act_fun == Activation_fun.SIGMOID | act_fun == Activation_fun.TANH) {
             double limit = Math.sqrt(10.0 / (inputSize + outputSize));
             for (int i = 0; i < outputSize; i++) {
                 for (int j = 0; j < inputSize; j++) {
@@ -65,7 +65,7 @@ public class flat_layer {
             z[i] = sum;
         }
         this.cache_lastZ = z.clone();
-        this.cache_lastOutput = this.act_fun.activate_array(z);
+        this.cache_lastOutput = this.act_fun.activate_1D_array(z);
         return this.cache_lastOutput.clone();
     }
 
@@ -100,8 +100,7 @@ public class flat_layer {
     }
 
     public void updateParameters(double learningRate) {
-        // Clip gradients to [-1, 1] for stability
-        for (int i = 0; i < outputSize; i++) {
+        for (int i = 0; i < outputSize; i++) { //clip, this is more operations though
             for (int j = 0; j < inputSize; j++) {
                 double grad = dW[i][j];
                 if (grad > 1.0) grad = 1.0;

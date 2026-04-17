@@ -1,5 +1,8 @@
-import architecture.RNN.rnn;               // Your network class
-import architecture.gradiant_loss;
+import architecture.NN_types.rnn;
+import architecture.Gradiant_loss;
+import architecture.Activation_fun;
+import architecture.blocks.Layer_data;
+import architecture.blocks.Layer_type;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -33,9 +36,17 @@ public class mnist_test {
         System.out.println("Train samples: " + trainData.size());
         System.out.println("Test samples: " + testData.size());
 
-        //network: 784 -> 800 -> 10 (wiki layout)
-        int[] layerSizes = {INPUT_SIZE, 800, OUTPUT_SIZE};
-        rnn net = new rnn(layerSizes, gradiant_loss.CATEGORICAL_CROSS_ENTROPY);
+        //network: 784 -> 400 -> 10
+        Layer_data[] layers = {
+                new Layer_data(INPUT_SIZE,400, Activation_fun.RELU, Layer_type.FLAT),
+                new Layer_data(400,OUTPUT_SIZE,Activation_fun.LINEAR, Layer_type.FLAT)
+        };
+
+
+        int[] output_sizes = {INPUT_SIZE, 400, OUTPUT_SIZE};
+        Activation_fun[] funs = {Activation_fun.RELU, Activation_fun.LINEAR};
+
+        rnn net = new rnn(layers, Gradiant_loss.CATEGORICAL_CROSS_ENTROPY, 0.01);
         net.learning_rate = 0.01;
 
         // Train

@@ -1,6 +1,6 @@
 package architecture;
 
-public enum gradiant_loss {
+public enum Gradiant_loss {
 
     /**
      * Mean Squared Error for regression tasks.
