@@ -28,7 +28,7 @@ public class rnn {
 
     public double learn_from_input(double[] input,double[] target){
         double[] output = get_output(input);
-        double[] dOutput = grad_and_loss.gradient(output, target);
+        double[] dOutput = (double[]) grad_and_loss.gradient(output, target);
         for(int i = layers.size()-1; i>=0;i--) {
             dOutput = layers.get(i).backward(dOutput);
         }

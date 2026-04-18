@@ -1,6 +1,6 @@
+package architecture;
+
 import architecture.NN_types.rnn;
-import architecture.Gradiant_loss;
-import architecture.Activation_fun;
 import architecture.blocks.Layer_data;
 import architecture.blocks.Layer_type;
 
@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class mnist_test {
+public class RNN_mnist_test {
 
     // MNIST constants
     private static final int INPUT_SIZE = 784;  // 28x28 pixels
@@ -38,16 +38,10 @@ public class mnist_test {
 
         //network: 784 -> 400 -> 10
         Layer_data[] layers = {
-                new Layer_data(INPUT_SIZE,400, Activation_fun.RELU, Layer_type.FLAT),
-                new Layer_data(400,OUTPUT_SIZE,Activation_fun.LINEAR, Layer_type.FLAT)
+                new Layer_data(Layer_type.FLAT, INPUT_SIZE,400, Activation_fun.RELU),
+                new Layer_data(Layer_type.FLAT, 400,OUTPUT_SIZE,Activation_fun.LINEAR)
         };
-
-
-        int[] output_sizes = {INPUT_SIZE, 400, OUTPUT_SIZE};
-        Activation_fun[] funs = {Activation_fun.RELU, Activation_fun.LINEAR};
-
         rnn net = new rnn(layers, Gradiant_loss.CATEGORICAL_CROSS_ENTROPY, 0.01);
-        net.learning_rate = 0.01;
 
         // Train
         int epochs = 10;

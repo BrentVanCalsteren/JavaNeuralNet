@@ -86,6 +86,7 @@ public class Conv_layer extends Layer {
     public double[][][] backward(double[][][] dOut) {
         int outHeight = lastZ[0].length;
         int outWidth = lastZ[0][0].length;
+        if (num_kernels != lastZ.length) throw new RuntimeException("Number of kernels does not match");
 
         // dZ = dOut * activation'(Z)
         double[][][] dZ = new double[num_kernels][outHeight][outWidth];

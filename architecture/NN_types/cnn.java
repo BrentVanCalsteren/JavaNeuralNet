@@ -11,7 +11,7 @@ public class cnn {
     private double learning_rate = 0.01;
 
 
-    public cnn(Layer_data[] layerTypes,double learning_rate, Gradiant_loss grad_and_loss) {
+    public cnn(Layer_data[] layerTypes, Gradiant_loss grad_and_loss,double learning_rate) {
         this.grad_and_loss = grad_and_loss;
         this.generate_layers(layerTypes);
         this.learning_rate = learning_rate;
@@ -54,7 +54,7 @@ public class cnn {
                 loss = ((Conv_layer)layer).backward((double[][][]) loss);
             } else if (layer instanceof Pooling_layer) {
                 assert loss instanceof double[][][];
-                loss = ((Pooling_layer)layer).forward((double[][][]) loss);
+                loss = ((Pooling_layer)layer).backward((double[][][]) loss);
             }
         }
 

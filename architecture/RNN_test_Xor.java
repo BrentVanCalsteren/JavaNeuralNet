@@ -5,7 +5,7 @@ import architecture.blocks.Layer_type;
 
 import java.util.Arrays;
 
-public class test_rnn {
+public class RNN_test_Xor {
     public static void main(String[] args) {
         testXOR();
     }
@@ -26,11 +26,10 @@ public class test_rnn {
                 {1, 1,1}
         };
         double[][] targets = {{0},{1},{1},{0},{1},{0},{0},{0}};
-
         int[] layer_output_size = {3, 6, 1};
         Layer_data[] layers= {
-             new Layer_data(3,9,Activation_fun.RELU, Layer_type.FLAT),
-                new Layer_data(9,1,Activation_fun.LINEAR, Layer_type.FLAT)
+             new Layer_data(Layer_type.FLAT, 3,9,Activation_fun.RELU),
+                new Layer_data(Layer_type.FLAT,9,1,Activation_fun.LINEAR)
 
         };
         rnn net = new rnn(layers, Gradiant_loss.BINARY_CROSS_ENTROPY,0.01);

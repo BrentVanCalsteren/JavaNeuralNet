@@ -16,8 +16,8 @@ public class Pooling_layer extends Layer {
         int channels = input.length;
         int inHeight = input[0].length;
         int inWidth = input[0][0].length;
-        int outHeight = (inHeight - window_size) / window_jump + 1;
-        int outWidth = (inWidth - window_size) / window_jump + 1;
+        int outHeight = (inHeight - window_size) / window_jump + 1 ;
+        int outWidth = (inWidth - window_size) / window_jump + 1 ;
 
         double[][][] output = new double[channels][outHeight][outWidth];
         maxIndices = new int[channels][outHeight][outWidth][2];
@@ -51,8 +51,8 @@ public class Pooling_layer extends Layer {
         int channels = dOut.length;
         int outHeight = dOut[0].length;
         int outWidth = dOut[0][0].length;
-        int inHeight = maxIndices[0][0][0][0] * 0 + (outHeight - 1) * window_jump + window_size; // reconstruct
-        int inWidth = (outWidth - 1) * window_jump + window_size;
+        int inHeight = maxIndices[0][0][0][0] * 0 + (outHeight) * window_jump + window_size; // reconstruct
+        int inWidth = (outWidth) * window_jump + window_size;
 
         double[][][] dInput = new double[channels][inHeight][inWidth];
 
