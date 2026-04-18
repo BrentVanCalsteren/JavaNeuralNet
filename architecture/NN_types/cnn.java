@@ -37,25 +37,48 @@ public class cnn {
             }
         }
     }
-    public double learn_from_input(double[] input,double[] target){
-        double[] output = get_output(input);
-        double[] dOutput = grad_and_loss.gradient(output, target);
+    public Object learn_from_input(Object input, Object target){
+        Object output = get_output(input);
+        Object loss = grad_and_loss.gradient(output, target);
+        Object l = loss;
         for(int i = layers.size()-1; i>=0;i--) {
-            dOutput = layers.get(i).backward(dOutput);
+            Layer layer = layers.get(i);
+            if (layer instanceof Flat_layer) {
+                assert loss instanceof double[];
+                loss = ((Flat_layer)layer).backward((double[]) loss);
+            } else if (layer instanceof Reduce_dim_layer) {
+                assert loss instanceof double[];
+                loss = ((Reduce_dim_layer)layer).backward((double[]) loss);
+            } else if (layer instanceof Conv_layer) {
+                assert loss instanceof double[][][];
+                loss = ((Conv_layer)layer).backward((double[][][]) loss);
+            } else if (layer instanceof Pooling_layer) {
+                assert loss instanceof double[][][];
+                loss = ((Pooling_layer)layer).forward((double[][][]) loss);
+            }
         }
 
         for(int i = layers.size()-1; i>=0;i--) {
             layers.get(i).updateParameters(learning_rate);
         }
-        return grad_and_loss.loss(output,target);
+        return l;
     }
 
-    public double[] get_output(double[] input){
+    public Object get_output(Object input){
         if (layers.isEmpty()) {return null;}
-        double[] temp = layers.getFirst().forward(input);
-        for(int i = 1; i<layers.size()-1;i++) {
-            temp = layers.get(i).forward(temp);
+        Object output = input;
+        for (Layer layer : layers) {
+            if (layer instanceof Flat_layer) {
+                output = ((Flat_layer)layer).forward((double[]) output);
+            } else if (layer instanceof Reduce_dim_layer) {
+                output = ((Reduce_dim_layer)layer).forward((double[][][]) output);
+            } else if (layer instanceof Conv_layer) {
+                output = ((Conv_layer)layer).forward((double[][][]) output);
+            } else if (layer instanceof Pooling_layer) {
+                output = ((Pooling_layer)layer).forward((double[][][]) output);
+            }
         }
-        return layers.getLast().forward(temp);
+        return output;
+
     }
 }

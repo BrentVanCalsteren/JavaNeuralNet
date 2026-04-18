@@ -13,7 +13,7 @@ public class Reduce_dim_layer extends Layer {
         this.output_size = this.input_depth * this.input_height * this.input_width;
     }
 
-    public double[] forward_(double[][][] input) {
+    public double[] forward(double[][][] input) {
         double[] flat = new double[output_size];
         int idx = 0;
         for (int c = 0; c < input_depth; c++) {
@@ -26,7 +26,7 @@ public class Reduce_dim_layer extends Layer {
         return flat;
     }
 
-    public double[][][] backward_(double[] dOut) {
+    public double[][][] backward(double[] dOut) {
         double[][][] dVolume = new double[input_depth][input_height][input_width];
         int idx = 0;
         for (int c = 0; c < input_depth; c++) {
@@ -40,6 +40,6 @@ public class Reduce_dim_layer extends Layer {
     }
 
     public int getOutput_size() { return output_size; }
-
+    @Override
     public void updateParameters(double lr) { }
 }

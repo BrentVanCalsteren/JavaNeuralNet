@@ -126,7 +126,7 @@ public class Conv_layer extends Layer {
 
         return dInput;
     }
-
+    @Override
     public void updateParameters(double learningRate) {
         for (int f = 0; f < num_kernels; f++) {
             for (int c = 0; c < input_depth; c++) {

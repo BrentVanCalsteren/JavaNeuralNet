@@ -98,7 +98,7 @@ public class Flat_layer extends Layer {
 
         return dInput;
     }
-
+    @Override
     public void updateParameters(double learningRate) {
         for (int i = 0; i < outputSize; i++) { //clip, this is more operations though
             for (int j = 0; j < inputSize; j++) {

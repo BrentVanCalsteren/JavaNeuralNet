@@ -20,13 +20,23 @@ public enum Gradiant_loss {
         }
 
         @Override
-        public double[] gradient(double[] predicted, double[] target) {
+        public double[] gradient_1D(double[] predicted, double[] target) {
             validateLengths(predicted, target);
             double[] grad = new double[predicted.length];
             for (int i = 0; i < predicted.length; i++) {
                 grad[i] = predicted[i] - target[i];
             }
             return grad;
+        }
+
+        @Override
+        public double[][] gradient_2D(double[][] predicted, double[][] target) {
+            return new double[0][];
+        }
+
+        @Override
+        public double[][][] gradient_3D(double[][][] predicted, double[][][] target) {
+            return new double[0][][];
         }
     },
 
@@ -50,13 +60,23 @@ public enum Gradiant_loss {
         }
 
         @Override
-        public double[] gradient(double[] predicted, double[] target) {
+        public double[] gradient_1D(double[] predicted, double[] target) {
             validateLengths(predicted, target);
             double[] grad = new double[predicted.length];
             for (int i = 0; i < predicted.length; i++) {
                 grad[i] = sigmoid(predicted[i]) - target[i];
             }
             return grad;
+        }
+
+        @Override
+        public double[][] gradient_2D(double[][] predicted, double[][] target) {
+            return new double[0][];
+        }
+
+        @Override
+        public double[][][] gradient_3D(double[][][] predicted, double[][][] target) {
+            return new double[0][][];
         }
     },
 
@@ -95,7 +115,7 @@ public enum Gradiant_loss {
         }
 
         @Override
-        public double[] gradient(double[] predicted, double[] target) {
+        public double[] gradient_1D(double[] predicted, double[] target) {
             validateLengths(predicted, target);
             double[] probs = softmax(predicted);
             double[] grad = new double[predicted.length];
@@ -103,6 +123,16 @@ public enum Gradiant_loss {
                 grad[i] = probs[i] - target[i];
             }
             return grad;
+        }
+
+        @Override
+        public double[][] gradient_2D(double[][] predicted, double[][] target) { //Todo: further implement
+            return new double[0][];
+        }
+
+        @Override
+        public double[][][] gradient_3D(double[][][] predicted, double[][][] target) {
+            return new double[0][][];
         }
     },
 
@@ -134,7 +164,7 @@ public enum Gradiant_loss {
         }
 
         @Override
-        public double[] gradient(double[] predicted, double[] target) {
+        public double[] gradient_1D(double[] predicted, double[] target) {
             validateLengths(predicted, target);
             double[] grad = new double[predicted.length];
             for (int i = 0; i < predicted.length; i++) {
@@ -147,10 +177,53 @@ public enum Gradiant_loss {
             }
             return grad;
         }
+
+        @Override
+        public double[][] gradient_2D(double[][] predicted, double[][] target) {
+            validateDimensions(predicted, target);
+            int rows = predicted.length;
+            int cols = predicted[0].length;
+            double[][] grad = new double[rows][cols];
+            for (int i = 0; i < rows; i++) {
+                for (int j = 0; j < cols; j++) {
+                    double diff = predicted[i][j] - target[i][j];
+                    if (Math.abs(diff) <= delta) {
+                        grad[i][j] = diff;
+                    } else {
+                        grad[i][j] = delta * Math.signum(diff);
+                    }
+                }
+            }
+            return grad;
+        }
+
+        @Override
+        public double[][][] gradient_3D(double[][][] predicted, double[][][] target) {
+            validateDimensions(predicted, target);
+            int d1 = predicted.length;
+            int d2 = predicted[0].length;
+            int d3 = predicted[0][0].length;
+            double[][][] grad = new double[d1][d2][d3];
+            for (int i = 0; i < d1; i++) {
+                for (int j = 0; j < d2; j++) {
+                    for (int k = 0; k < d3; k++) {
+                        double diff = predicted[i][j][k] - target[i][j][k];
+                        if (Math.abs(diff) <= delta) {
+                            grad[i][j][k] = diff;
+                        } else {
+                            grad[i][j][k] = delta * Math.signum(diff);
+                        }
+                    }
+                }
+            }
+            return grad;
+        }
     };
 
     public abstract double loss(double[] predicted, double[] target);
-    public abstract double[] gradient(double[] predicted, double[] target);
+    public abstract double[] gradient_1D(double[] predicted, double[] target);
+    public abstract double[][] gradient_2D(double[][] predicted, double[][] target);
+    public abstract double[][][] gradient_3D(double[][][] predicted, double[][][] target);
     /////////////////////////////
     //Utility fun
     /////////////////////////////
@@ -179,6 +252,18 @@ public enum Gradiant_loss {
         if (a.length != b.length) {
             throw new IllegalArgumentException(
                     "Length mismatch: predicted=" + a.length + ", target=" + b.length);
+        }
+    }
+
+    protected static void validateDimensions(double[][] a, double[][] b) {
+        if (a.length != b.length || a[0].length != b[0].length) {
+            throw new IllegalArgumentException("2D shape mismatch");
+        }
+    }
+
+    protected static void validateDimensions(double[][][] a, double[][][] b) {
+        if (a.length != b.length || a[0].length != b[0].length || a[0][0].length != b[0][0].length) {
+            throw new IllegalArgumentException("3D shape mismatch");
         }
     }
 }

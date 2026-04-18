@@ -67,6 +67,6 @@ public class Pooling_layer extends Layer {
         }
         return dInput;
     }
-
+    @Override
     public void updateParameters(double learningRate) { }
 }
