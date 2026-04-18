@@ -1,9 +1,9 @@
-#  Renewing RNN from Scratch in Java project -> goal is implementing other architecture's as well
+#  Reviving the Java NN project
 ## Focus right now
 
 - RNN ONLY NEED STREAMLINING 🤠
-- CNN IS GETTING THERE 🐦
-- LSTM-GRU (gru replacing lstm?)
+- CNN IS USABLE 🐦
+- LSTM-GRU (gru replacing lstm?) -> next maybe sidequest into embedding nd stuff
 - transformer 🧢
 
 ## why not just updating old code
