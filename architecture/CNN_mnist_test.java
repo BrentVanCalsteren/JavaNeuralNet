@@ -1,8 +1,5 @@
 package architecture;
-import architecture.Activation_fun;
-import architecture.Gradiant_loss;
 import architecture.NN_types.cnn;
-import architecture.NN_types.rnn;
 import architecture.blocks.*;
 
 import java.io.BufferedReader;
@@ -25,7 +22,7 @@ public class CNN_mnist_test {
     private static final double LEARNING_RATE = 0.01;
 
     public static void main(String[] args) {
-        String csvPath = "mnist_flattened.csv";  // Update path if needed
+        String csvPath = "input_handling/mnist_flattened.csv";  // Update path if needed
 
         System.out.println("Loading MNIST data...");
         List<MNISTSample> allSamples = loadMNIST(csvPath);

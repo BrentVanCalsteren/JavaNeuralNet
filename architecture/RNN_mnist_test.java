@@ -19,7 +19,7 @@ public class RNN_mnist_test {
     private static double train_test_split = 0.1;
 
     public static void main(String[] args) {
-        String csvFilePath = "mnist_flattened.csv";  // Change if needed
+        String csvFilePath = "input_handling/mnist_flattened.csv";  // Change if needed
 
         System.out.println("Loading MNIST data from " + csvFilePath + "...");
         List<MNISTSample> allSamples = loadMNIST(csvFilePath);
